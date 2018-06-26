@@ -12,6 +12,8 @@ export type CellKeyGetterParams = {
   columnIndex: number,
 };
 
+export type CellKeyGetter = (props: CellKeyGetterParams) => string;
+
 export type CellPosition = {columnIndex: number, rowIndex: number};
 
 export type CellRendererParams = {
