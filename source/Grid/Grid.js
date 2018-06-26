@@ -1,6 +1,7 @@
 /** @flow */
 
 import type {
+  CellKeyGetterParams,
   CellKeyGetter,
   CellRenderer,
   CellRangeRenderer,
@@ -265,7 +266,8 @@ class Grid extends React.PureComponent<Props, State> {
     autoContainerWidth: false,
     autoHeight: false,
     autoWidth: false,
-    cellKeyGetter: ({rowIndex, columnIndex}) => `${rowIndex}-${columnIndex}`,
+    cellKeyGetter: ({rowIndex, columnIndex}: CellKeyGetterParams) =>
+      `${rowIndex}-${columnIndex}`,
     cellRangeRenderer: defaultCellRangeRenderer,
     containerRole: 'rowgroup',
     containerStyle: {},
