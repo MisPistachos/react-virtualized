@@ -1,6 +1,7 @@
 /** @flow */
 
 import type {
+  CellKeyGetter,
   CellRenderer,
   CellRangeRenderer,
   CellPosition,
@@ -78,6 +79,8 @@ type Props = {
    * Intended for use with WindowScroller
    */
   autoWidth: boolean,
+
+  cellKeyGetter: CellKeyGetter,
 
   /** Responsible for rendering a cell given an row and column index.  */
   cellRenderer: CellRenderer,
@@ -262,6 +265,7 @@ class Grid extends React.PureComponent<Props, State> {
     autoContainerWidth: false,
     autoHeight: false,
     autoWidth: false,
+    cellKeyGetter: ({rowIndex, columnIndex}) => `${rowIndex}-${columnIndex}`,
     cellRangeRenderer: defaultCellRangeRenderer,
     containerRole: 'rowgroup',
     containerStyle: {},
@@ -1075,6 +1079,7 @@ class Grid extends React.PureComponent<Props, State> {
     state: State = this.state,
   ) {
     const {
+      cellKeyGetter,
       cellRenderer,
       cellRangeRenderer,
       columnCount,
@@ -1214,6 +1219,7 @@ class Grid extends React.PureComponent<Props, State> {
 
       this._childrenToDisplay = cellRangeRenderer({
         cellCache: this._cellCache,
+        cellKeyGetter,
         cellRenderer,
         columnSizeAndPositionManager:
           instanceProps.columnSizeAndPositionManager,
@@ -1556,7 +1562,7 @@ class Grid extends React.PureComponent<Props, State> {
   _resetStyleCache() {
     const styleCache = this._styleCache;
     const cellCache = this._cellCache;
-    const {isScrollingOptOut} = this.props;
+    const {isScrollingOptOut, cellKeyGetter} = this.props;
 
     // Reset cell and style caches once scrolling stops.
     // This makes Grid simpler to use (since cells commonly change).
@@ -1578,7 +1584,14 @@ class Grid extends React.PureComponent<Props, State> {
         columnIndex <= this._columnStopIndex;
         columnIndex++
       ) {
-        let key = `${rowIndex}-${columnIndex}`;
+        let key = cellKeyGetter({
+          rowStartIndex: this._rowStartIndex,
+          rowStopIndex: this._rowStopIndex,
+          rowIndex,
+          columnStartIndex: this._columnStartIndex,
+          columnStopIndex: this._columnStopIndex,
+          columnIndex,
+        });
         this._styleCache[key] = styleCache[key];
 
         if (isScrollingOptOut) {

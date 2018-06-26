@@ -3,6 +3,15 @@
 import * as React from 'react';
 import ScalingCellSizeAndPositionManager from './utils/ScalingCellSizeAndPositionManager';
 
+export type CellKeyGetterParams = {
+  rowStartIndex: number,
+  rowStopIndex: number,
+  rowIndex: number,
+  columnStartIndex: number,
+  columnStopIndex: number,
+  columnIndex: number,
+};
+
 export type CellPosition = {columnIndex: number, rowIndex: number};
 
 export type CellRendererParams = {
@@ -22,6 +31,7 @@ export type StyleCache = {[key: string]: Object};
 
 export type CellRangeRendererParams = {
   cellCache: CellCache,
+  cellKeyGetter: CellKeyGetter,
   cellRenderer: CellRenderer,
   columnSizeAndPositionManager: ScalingCellSizeAndPositionManager,
   columnStartIndex: number,
